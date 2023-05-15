@@ -1,0 +1,2 @@
+INSERT INTO tabel ("column1", "column2", "column3", "column4", "column5", "column6", "column7", "column8") VALUES ("Data enzo", "Data enz2o", "Data enzo3", "Data en9zo", "Data 4enzo", "Data e5nzo", "Data en6zo", "Data enz7o");
+INSERT INTO tabel ("column1", "column2", "column3", "column4", "column5", "column6", "column7", "column8") VALUES ("Data enzo", "Data enz2o", "Data enzo3", "Data en9zo", "Data 4enzo", "Data e5nzo", "Data en6zo", "Data enz7o");

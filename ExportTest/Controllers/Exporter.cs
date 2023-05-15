@@ -2,7 +2,7 @@ using System.Text;
 
 namespace ExportTest.Controllers;
 
-internal static class Caht
+internal static class Exporter
 {
     public static void CreateTables(IEnumerable<ExportDataViewModel> exportData)
     {
@@ -35,7 +35,6 @@ internal static class Caht
 
             writer.WriteLine($"INSERT INTO {exportData.TableName} ({columns}) VALUES ({data});");
         }
-        writer.Close();
     }
 }
 
