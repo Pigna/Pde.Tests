@@ -1,11 +1,8 @@
-using System;
-using System.Data.SqlClient;
-using System.IO;
 using System.Text;
 
 namespace ExportTest.Controllers;
 
-class Caht
+internal static class Caht
 {
     public static void CreateTables(IEnumerable<ExportDataViewModel> exportData)
     {
