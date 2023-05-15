@@ -1,6 +1,7 @@
 using System;
 using System.Data.SqlClient;
 using System.IO;
+using System.Text;
 
 namespace ExportTest.Controllers;
 
@@ -10,42 +11,35 @@ class Caht
     {
         const string fileName = "ProjectName_Tables.sql";
 
-        var tables = exportData.GroupBy(table => table.TableName).ToList();
-        // Write SQL script to file
-        using var writer = new StreamWriter(fileName);
+        var tables = exportData.GroupBy(table => table.TableName);
+
+        var scriptBuilder = new StringBuilder();
         foreach (var table in tables)
         {
-            writer.WriteLine($"-- Create table {table.Key}");
-            writer.WriteLine($"CREATE TABLE \"{table.Key}\" (");
-
-            var line = string.Join(",\n", table.Select(column => $"\"{column.ColumnName}\" {column.DataType}"));
-            writer.WriteLine(line);
-            
-            writer.WriteLine(");");
+            scriptBuilder.Append($"CREATE TABLE \"{table.Key}\" (");
+            scriptBuilder.AppendJoin(", ", table.Select(column => $"\"{column.ColumnName}\" {column.DataType}"));
+            scriptBuilder.AppendLine(");");
         }
-        writer.Close();
+        
+        File.WriteAllText(fileName, scriptBuilder.ToString());
     }
 
     public static void InsertData(TableData exportData)
+    {
+        if (exportData.Data == null) return;
+        
+        var fileName = $"ProjectName_Insert_{exportData.TableName}.sql";
+        
+        using var writer = new StreamWriter(fileName);
+        foreach (var row in exportData.Data)
         {
-            if (exportData.Data == null) return;
-            
-            var fileName = $"ProjectName_Insert_{exportData.TableName}.sql";
-            
-            // Write SQL script to file
-            using var writer = new StreamWriter(fileName);
-            
-            writer.WriteLine($"-- Insert data into table {exportData.TableName}");
+            var columns = string.Join(", ", row.Select(column => $"\"{column.Key}\""));
+            var data = string.Join(", ", row.Select(column => $"\"{column.Value}\""));
 
-            foreach (var row in exportData.Data)
-            {
-                var columns = string.Join(", ", row.Select(column => $"\"{column.Key}\""));
-                var data = string.Join(", ", row.Select(column => $"\"{column.Value}\""));
-
-                writer.WriteLine($"INSERT INTO {exportData.TableName} ({columns}) VALUES ({data});");
-            }
-            writer.Close();
+            writer.WriteLine($"INSERT INTO {exportData.TableName} ({columns}) VALUES ({data});");
         }
+        writer.Close();
+    }
 }
 
 
