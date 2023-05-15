@@ -8,9 +8,12 @@ CREATE TABLE "2" (
 );
 -- Create table 3
 CREATE TABLE "3" (
-"asd" Account, "wergfdgfgd" Account, "te3ff" Account
+"asd" Account,
+"wergfdgfgd" Account,
+"te3ff" Account
 );
 -- Create table 4
 CREATE TABLE "4" (
-"fgd" Account, "rwrreg" Account
+"fgd" Account,
+"rwrreg" Account
 );

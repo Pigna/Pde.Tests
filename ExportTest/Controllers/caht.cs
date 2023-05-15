@@ -18,17 +18,12 @@ class Caht
             writer.WriteLine($"-- Create table {table.Key}");
             writer.WriteLine($"CREATE TABLE \"{table.Key}\" (");
 
-
-            foreach (var column in table)
-            {
-                var line = $"  \"{column.ColumnName}\" {column.DataType}";
-                if (column != table.Last())
-                    line += ",";
-                writer.WriteLine(line);
-            }
-
+            var line = string.Join(",\n", table.Select(column => $"\"{column.ColumnName}\" {column.DataType}"));
+            writer.WriteLine(line);
+            
             writer.WriteLine(");");
         }
+        writer.Close();
     }
 
     public static void InsertData(TableData exportData)
@@ -41,19 +36,15 @@ class Caht
             using var writer = new StreamWriter(fileName);
             
             writer.WriteLine($"-- Insert data into table {exportData.TableName}");
+
             foreach (var row in exportData.Data)
             {
-                var columns = "";
-                var data = "";
-
-                foreach (var column in row)
-                {
-                    columns += column.Key + ", ";
-                    data += column.Value + ", ";
-                }
+                var columns = string.Join(", ", row.Select(column => $"\"{column.Key}\""));
+                var data = string.Join(", ", row.Select(column => $"\"{column.Value}\""));
 
                 writer.WriteLine($"INSERT INTO {exportData.TableName} ({columns}) VALUES ({data});");
             }
+            writer.Close();
         }
 }
 
